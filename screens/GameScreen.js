@@ -5,6 +5,7 @@ import NumberContainer from "../components/game/NumberContainer";
 import PrimaryButton from "../components/PrimaryButton";
 import Card from "../components/Card";
 import { Ionicons } from "@expo/vector-icons";
+import GuessLogItem from "../components/game/GuessLogItem";
 
 function generateRandomBetween(min, max, exclude) {
   const rndNum = Math.floor(Math.random() * (max - min)) + min;
@@ -26,7 +27,7 @@ const GameScreen = ({ userNumber, onGameOver }) => {
 
   useEffect(() => {
     if (currentGuess === userNumber) {
-      onGameOver();
+      onGameOver(guessRounds.length);
     }
   }, [currentGuess, userNumber, onGameOver]);
 
@@ -60,7 +61,7 @@ const GameScreen = ({ userNumber, onGameOver }) => {
     setCurrentGuess(newRndNumber);
     setGuessRounds((prevGuessRounds) => [newRndNumber, ...prevGuessRounds]);
   }
-
+  const guessRoundsLength = guessRounds.length;
   return (
     <View style={styles.screen}>
       {/* <Text style={styles.title}>Opponent's Guess</Text> */}
@@ -89,11 +90,18 @@ const GameScreen = ({ userNumber, onGameOver }) => {
           <Text key={guessRounds}>{guessRounds}</Text>
         ))}
       </View> */}
-      <FlatList
-        data={guessRounds}
-              renderItem={(itemData) => <Text>{itemData.item}</Text>}
-              keyExtractor={(item) => item}
-      />
+      <View style={styles.listcontainer}>
+        <FlatList
+          data={guessRounds}
+          renderItem={(itemData) => (
+            <GuessLogItem
+              roundNumber={guessRoundsLength - itemData.index}
+              guess={itemData.item}
+            />
+          )}
+          keyExtractor={(item) => item}
+        />
+      </View>
     </View>
   );
 };
@@ -104,7 +112,11 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     padding: 20,
-  },
+    },
+    listcontainer: {
+      flex: 1,
+      padding: 16,
+    },
   instructionText: {
     color: "white",
     fontSize: 24,
