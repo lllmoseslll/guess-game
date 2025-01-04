@@ -5,7 +5,8 @@ import Title from "../components/Title";
 import Card from "../components/Card";
 
 const StartGameScreen = ({ onPickNumber }) => {
-  const [enteredNumber, setEnteredNumber] = useState("");
+    const [enteredNumber, setEnteredNumber] = useState("");
+    
 
   function numberInputHandler(enteredText) {
     setEnteredNumber(enteredText);
